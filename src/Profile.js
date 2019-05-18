@@ -23,16 +23,9 @@ export default class Profile extends Component {
   }
 
   render() {
-    /*return (
-      <div>
-        {this.props.match.params.handle}
-        {this.state.postList[0]}
-      </div>
-    );*/
     if (this.state.loading) {
       return <div>loading...</div>;
-    } else {
-      console.log(this.state.userPosts);
+    } else if (this.state.userPosts.postList) {
       return (
         <div>
           {this.state.userPosts.postList.map(post => (
@@ -43,8 +36,8 @@ export default class Profile extends Component {
           ))}
         </div>
       );
+    } else {
+      return <div>no post...</div>;
     }
   }
 }
-
-//
