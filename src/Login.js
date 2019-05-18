@@ -85,7 +85,7 @@ export default class Login extends React.Component {
               Doesn't have an account?&nbsp;&nbsp;
               <Button
                 variant="btn btn-outline-success"
-                onClick={() => this.props.history.push("/register")}
+                onClick={() => this.props.history.push("/accounts/register")}
               >
                 Register
               </Button>

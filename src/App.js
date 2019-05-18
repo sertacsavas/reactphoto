@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Home } from "./Home";
 import Login from "./Login";
-import { Profile } from "./Profile";
-import { NoMatch } from "./NoMatch";
+import Profile from "./Profile";
 import NavigationBar from "./NavigationBar";
 import { Jumbotron } from "./Jumbotron";
 import { Layout } from "./Layout";
@@ -56,6 +55,7 @@ class App extends Component {
       <React.Fragment>
         <Router>
           <NavigationBar
+            userInfo={this.Auth.getProfile()}
             loggedIn={this.state.loggedIn}
             logout={() => this.logout()}
           />
@@ -63,9 +63,8 @@ class App extends Component {
           <Layout>
             <Switch>
               <Route exact path="/" component={Home} />
-              <Route path="/profile" component={Profile} />
               <Route
-                path="/login"
+                path="/accounts/login"
                 render={props => (
                   <Login
                     {...props}
@@ -77,7 +76,7 @@ class App extends Component {
                 )}
               />
               <Route
-                path="/register"
+                path="/accounts/register"
                 render={props => (
                   <Register
                     {...props}
@@ -88,7 +87,8 @@ class App extends Component {
                   />
                 )}
               />
-              <Route component={NoMatch} />
+
+              <Route path="/:handle" render={props => <Profile {...props} />} />
             </Switch>
           </Layout>
         </Router>
@@ -98,3 +98,4 @@ class App extends Component {
 }
 
 export default App;
+//<Route path="/profile" component={Profile} />

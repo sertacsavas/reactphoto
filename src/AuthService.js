@@ -8,8 +8,6 @@ export default class AuthService {
   }
 
   login(usernameOrEmail, password) {
-    // Get a token
-
     return this.fetch(`${this.domain}/api/auth/signin`, {
       method: "POST",
       body: JSON.stringify({
@@ -17,23 +15,13 @@ export default class AuthService {
         password
       })
     }).then(res => {
+      console.log(res);
       this.setToken(res.accessToken);
       return Promise.resolve(res);
     });
-    /*const token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjIyMTYyMzkwMjJ9.pTWIoClKvZRJFzXPTVDI2yfjt4pG9Su8lHOWooszIYc";
-    this.setToken(token);
-
-    const decoded = decode(
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjIyMTYyMzkwMjJ9.pTWIoClKvZRJFzXPTVDI2yfjt4pG9Su8lHOWooszIYc"
-    );
-    console.log(decoded);
-    return Promise.resolve(token);*/
   }
 
   signup(email, name, username, password) {
-    // Get a token
-
     return this.fetch(`${this.domain}/api/auth/signup`, {
       method: "POST",
       body: JSON.stringify({
@@ -46,7 +34,6 @@ export default class AuthService {
   }
 
   loggedIn() {
-    // Checks if there is a saved token and it's still valid
     const token = this.getToken();
     return !!token && !this.isTokenExpired(token); // handwaiving here
   }
@@ -78,7 +65,7 @@ export default class AuthService {
   }
 
   getProfile() {
-    return decode(this.getToken());
+    return this.getToken() ? decode(this.getToken()) : null;
   }
 
   fetch(url, options) {
@@ -97,7 +84,9 @@ export default class AuthService {
       ...options
     })
       .then(this._checkStatus)
-      .then(response => response.json());
+      .then(response => {
+        return response.json();
+      });
   }
 
   _checkStatus(response) {

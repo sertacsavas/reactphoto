@@ -112,7 +112,7 @@ class Register extends React.Component {
               Have an account?&nbsp;&nbsp;
               <Button
                 variant="btn btn-outline-success"
-                onClick={() => this.props.history.push("/login")}
+                onClick={() => this.props.history.push("/accounts/login")}
               >
                 Login
               </Button>

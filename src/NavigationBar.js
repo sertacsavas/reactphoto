@@ -17,13 +17,13 @@ export default class NavigationBar extends React.Component {
             </Nav.Item>
             {this.props.loggedIn ? (
               <Nav.Item>
-                <Link to="/profile">
+                <Link to={this.props.userInfo.username}>
                   <Button variant="secondary">Profile</Button>
                 </Link>
               </Nav.Item>
             ) : (
               <Nav.Item>
-                <Link to="/login">
+                <Link to="/accounts/login">
                   <Button variant="btn btn-outline-success">Login</Button>
                 </Link>
               </Nav.Item>
@@ -48,7 +48,7 @@ export default class NavigationBar extends React.Component {
 /*
 (
               <Nav.Item>
-                <Link to="/register">
+                <Link to="/accounts/register">
                   <Button variant="outline-primary">Register</Button>
                 </Link>
               </Nav.Item>
