@@ -82,7 +82,7 @@ export default class AuthService {
   }
 
   fetch(url, options) {
-    // performs api calls sending the required authentication headers
+    // performs api calls sending the required authentication headers sertac
     const headers = {
       Accept: "application/json",
       "Content-Type": "application/json"
