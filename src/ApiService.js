@@ -6,13 +6,18 @@ export default class ApiService {
     this.Auth = new AuthService();
   }
 
-  getUserPosts(username, page, size) {
+  getUserPosts(id, page, size) {
     return this.fetch(
-      "/api/post/getPosts/" + username + "?page=" + page + "&size=" + size,
+      "/api/post/getPosts/" + id + "?page=" + page + "&size=" + size,
       {
         method: "GET"
       }
     );
+  }
+  getUserByUserName(username) {
+    return this.fetch("/api/user/getUserByUserName/" + username, {
+      method: "GET"
+    });
   }
 
   fetch(url, options) {
