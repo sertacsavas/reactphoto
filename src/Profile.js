@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import ApiService from "./ApiService";
-import { Spinner, Row, Col, Image } from "react-bootstrap";
+import { Spinner } from "react-bootstrap";
+import ProfilePostGallery from "./ProfilePostGallery";
+import ProfileHeader from "./ProfileHeader";
 
 export default class Profile extends Component {
   constructor(props) {
@@ -13,8 +15,7 @@ export default class Profile extends Component {
       user: ""
     };
   }
-
-  componentDidMount() {
+  loadPosts() {
     this.ApiService.getUserByUserName(this.props.match.params.handle).then(
       result => {
         this.setState({
@@ -23,19 +24,26 @@ export default class Profile extends Component {
         });
 
         if (this.state.user.id) {
-          this.loadPosts();
+          this.ApiService.getUserPosts(this.state.user.id, 0, 12).then(
+            result => {
+              this.setState({
+                loadingposts: false,
+                postList: [...this.state.postList, ...result.postList]
+              });
+            }
+          );
         }
       }
     );
   }
+  componentDidMount() {
+    this.loadPosts();
+  }
 
-  loadPosts() {
-    this.ApiService.getUserPosts(this.state.user.id, 0, 12).then(result => {
-      this.setState({
-        loadingposts: false,
-        postList: [...this.state.postList, ...result.postList]
-      });
-    });
+  componentDidUpdate(prevProps) {
+    if (prevProps.match.params.handle !== this.props.match.params.handle) {
+      this.loadPosts();
+    }
   }
 
   render() {
@@ -46,43 +54,10 @@ export default class Profile extends Component {
     let loading = <Spinner animation="border" variant="secondary" />;
 
     if (this.state.user.id) {
-      profile = (
-        <div className="profile">
-          <Row>
-            <Col xs={6} md={4}>
-              <div>
-                <Image
-                  className="profile-photo"
-                  src="https://source.unsplash.com/random/"
-                  roundedCircle
-                  fluid
-                />
-              </div>
-            </Col>
-            <Col xs={12} md={8}>
-              <div>{this.state.user.username}</div>
-              <div>{this.state.user.name}</div>
-            </Col>
-          </Row>
-        </div>
-      );
+      profile = <ProfileHeader user={this.state.user} />;
+
       if (this.state.postList.length) {
-        posts = (
-          <div className="gallery-container">
-            <div className="gallery">
-              {this.state.postList.map(post => (
-                <div className="gallery-item">
-                  <Image
-                    key={post.id}
-                    className="gallery-image"
-                    src={post.url}
-                    fluid
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        );
+        posts = <ProfilePostGallery postList={this.state.postList} />;
       }
     } else {
       notAvailable = (

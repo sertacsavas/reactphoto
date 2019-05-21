@@ -4,7 +4,6 @@ import { Home } from "./Home";
 import Login from "./Login";
 import Profile from "./Profile";
 import NavigationBar from "./NavigationBar";
-import { Jumbotron } from "./Jumbotron";
 import { Layout } from "./Layout";
 import Register from "./Register";
 import AuthService from "./AuthService";
@@ -15,13 +14,15 @@ class App extends Component {
     this.Auth = new AuthService();
     this.state = {
       token: this.Auth.getToken,
-      loggedIn: this.Auth.loggedIn()
+      loggedIn: this.Auth.loggedIn(),
+      userInfo: this.Auth.getProfile()
     };
   }
   refreshAuth() {
     this.setState({
       token: this.Auth.getToken,
-      loggedIn: this.Auth.loggedIn()
+      loggedIn: this.Auth.loggedIn(),
+      userInfo: this.Auth.getProfile()
     });
   }
   logout() {
@@ -55,11 +56,10 @@ class App extends Component {
       <React.Fragment>
         <Router>
           <NavigationBar
-            userInfo={this.Auth.getProfile()}
+            userInfo={this.state.userInfo}
             loggedIn={this.state.loggedIn}
             logout={() => this.logout()}
           />
-          <Jumbotron />
           <Layout>
             <Switch>
               <Route exact path="/" component={Home} />
@@ -98,4 +98,3 @@ class App extends Component {
 }
 
 export default App;
-//<Route path="/profile" component={Profile} />
