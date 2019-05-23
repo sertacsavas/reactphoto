@@ -88,7 +88,12 @@ class App extends Component {
                 )}
               />
 
-              <Route path="/:handle" render={props => <Profile {...props} />} />
+              <Route
+                path="/:handle"
+                render={props => (
+                  <Profile {...props} userInfo={this.state.userInfo} />
+                )}
+              />
             </Switch>
           </Layout>
         </Router>

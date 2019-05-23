@@ -12,70 +12,109 @@ export default class Profile extends Component {
       loadingposts: true,
       loadingprofile: true,
       postList: [],
-      user: ""
+      user: "",
+      per: 12,
+      page: 0,
+      totalPages: null,
+      scrolling: false,
+      totalElements: null
     };
   }
-  loadPosts() {
+
+  loadUserAndPosts() {
     this.ApiService.getUserByUserName(this.props.match.params.handle).then(
       result => {
         this.setState({
           user: result,
           loadingprofile: false
         });
-
-        if (this.state.user.id) {
-          this.ApiService.getUserPosts(this.state.user.id, 0, 12).then(
-            result => {
-              this.setState({
-                loadingposts: false,
-                postList: [...this.state.postList, ...result.postList]
-              });
-            }
-          );
-        }
+        this.loadPosts();
       }
     );
   }
-  componentDidMount() {
-    this.loadPosts();
+
+  loadPosts() {
+    if (this.state.user.id) {
+      this.ApiService.getUserPosts(
+        this.state.user.id,
+        this.state.page,
+        this.state.per
+      ).then(result => {
+        this.setState({
+          loadingposts: false,
+          postList: [...this.state.postList, ...result.postList],
+          scrolling: false,
+          totalPages: result.totalPages,
+          totalElements: result.totalElements
+        });
+      });
+    }
+  }
+
+  loadMore = () => {
+    this.setState(
+      prevState => ({
+        page: prevState.page + 1,
+        scrolling: true,
+        loadingposts: true
+      }),
+      this.loadPosts
+    );
+  };
+
+  handleScroll = () => {
+    const { scrolling, totalPages, page } = this.state;
+    if (scrolling) return;
+    if (totalPages <= page) return;
+    var lastLi = document.querySelector("ul.gallery-container > li:last-child");
+
+    if (lastLi) {
+      var lastLiOffset = lastLi.offsetTop + lastLi.clientHeight;
+      var pageOffset = window.pageYOffset + window.innerHeight;
+      var bottomOffset = 20;
+      if (pageOffset > lastLiOffset - bottomOffset) {
+        this.loadMore();
+      }
+    }
+  };
+
+  componentWillMount() {
+    this.loadUserAndPosts();
+    this.scrollListener = window.addEventListener("scroll", e => {
+      this.handleScroll(e);
+    });
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.match.params.handle !== this.props.match.params.handle) {
-      this.loadPosts();
+      this.loadUserAndPosts();
     }
   }
 
   render() {
-    //src={this.state.user.url}
-    let profile;
-    let posts;
-    let notAvailable;
-    let loading = <Spinner animation="border" variant="secondary" />;
-
-    if (this.state.user.id) {
-      profile = <ProfileHeader user={this.state.user} />;
-
-      if (this.state.postList.length) {
-        posts = <ProfilePostGallery postList={this.state.postList} />;
-      }
-    } else {
-      notAvailable = (
-        <div className="ErrorPage__errorContainer__">
-          <h2>Sorry, this page isn't available.</h2>
-          <p>
-            The link you followed may be broken, or the page may have been
-            removed.
-            <a href="/"> Go back to Photo.</a>
-          </p>
-        </div>
-      );
-    }
-
-    return this.state.loadingprofile
-      ? loading
-      : this.state.user.id
-      ? [profile, posts, this.state.loadingposts ? loading : null]
-      : notAvailable;
+    return this.state.loadingprofile ? (
+      <Spinner animation="border" variant="secondary" />
+    ) : this.state.user.id ? (
+      <div>
+        <ProfileHeader
+          user={this.state.user}
+          totalElements={this.state.totalElements}
+          userInfo={this.props.userInfo}
+        />
+        <ProfilePostGallery postList={this.state.postList} />
+        {this.state.loadingposts ? (
+          <Spinner animation="border" variant="secondary" />
+        ) : null}
+      </div>
+    ) : (
+      <div className="ErrorPage__errorContainer__">
+        <h2>Sorry, this page isn't available.</h2>
+        <p>
+          The link you followed may be broken, or the page may have been
+          removed.
+          <a href="/"> Go back to Photo.</a>
+        </p>
+      </div>
+    );
   }
 }
