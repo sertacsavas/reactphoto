@@ -15,7 +15,8 @@ export default class ProfileHeader extends Component {
         </div>
         <div className="profile-user-settings">
           <h1 className="profile-user-name">{this.props.user.username}</h1>
-          {this.props.userInfo.username === this.props.user.username ? (
+          {(this.props.userInfo && this.props.userInfo.username) ===
+          this.props.user.username ? (
             <button className="btn profile-edit-btn">Edit Profile</button>
           ) : (
             <div>follow</div>
