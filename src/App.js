@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
-import { Home } from "./Home";
+import Home from "./Home";
 import Login from "./Login";
 import Profile from "./Profile";
 import NavigationBar from "./NavigationBar";
@@ -62,7 +62,13 @@ class App extends Component {
           />
           <Layout>
             <Switch>
-              <Route exact path="/" component={Home} />
+              <Route
+                exact
+                path="/"
+                render={props => (
+                  <Home {...props} userInfo={this.state.userInfo} />
+                )}
+              />
               <Route
                 path="/accounts/login"
                 render={props => (

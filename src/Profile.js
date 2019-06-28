@@ -21,8 +21,30 @@ export default class Profile extends Component {
     };
   }
 
+  follow() {
+    this.ApiService.follow(this.state.user.id).then(() => {
+      let tempUser = Object.assign({}, this.state.user);
+      tempUser.following = true;
+      tempUser.followerCount++;
+      this.setState({
+        user: tempUser
+      });
+    });
+  }
+
+  unfollow() {
+    this.ApiService.unfollow(this.state.user.id).then(() => {
+      let tempUser = Object.assign({}, this.state.user);
+      tempUser.following = false;
+      tempUser.followerCount--;
+      this.setState({
+        user: tempUser
+      });
+    });
+  }
+
   loadUserAndPosts() {
-    this.ApiService.getUserByUserName(this.props.match.params.handle).then(
+    this.ApiService.getProfileByUserName(this.props.match.params.handle).then(
       result => {
         this.setState({
           user: result,
@@ -63,6 +85,7 @@ export default class Profile extends Component {
   };
 
   handleScroll = () => {
+    //console.log("handleScroll");
     const { scrolling, totalPages, page } = this.state;
     if (scrolling) return;
     if (totalPages <= page) return;
@@ -79,10 +102,14 @@ export default class Profile extends Component {
   };
 
   componentWillMount() {
+    //console.log("componentWillMount");
     this.loadUserAndPosts();
-    this.scrollListener = window.addEventListener("scroll", e => {
-      this.handleScroll(e);
-    });
+    this.scrollListener = window.addEventListener("scroll", this.handleScroll);
+  }
+
+  componentWillUnmount() {
+    //console.log("componentWillUnmount");
+    window.removeEventListener("scroll", this.handleScroll);
   }
 
   componentDidUpdate(prevProps) {
@@ -100,8 +127,17 @@ export default class Profile extends Component {
           user={this.state.user}
           totalElements={this.state.totalElements}
           userInfo={this.props.userInfo}
+          follow={() => {
+            this.follow();
+          }}
+          unfollow={() => {
+            this.unfollow();
+          }}
         />
-        <ProfilePostGallery postList={this.state.postList} />
+        <ProfilePostGallery
+          postList={this.state.postList}
+          totalElements={this.state.totalElements}
+        />
         {this.state.loadingposts ? (
           <Spinner animation="border" variant="secondary" />
         ) : null}

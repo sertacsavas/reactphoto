@@ -84,13 +84,13 @@ export default class AuthService {
       ...options
     })
       .then(this._checkStatus)
-      .then(response => {
-        return response.json();
-      });
+      .then(res => res.text())
+      .then(text => (text.length ? JSON.parse(text) : {}));
   }
 
   _checkStatus(response) {
     // raises an error in case response status is not a success
+    //console.log(response);
     if (response.status >= 200 && response.status < 300) {
       return response;
     } else {

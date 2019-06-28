@@ -18,8 +18,14 @@ export default class ProfileHeader extends Component {
           {(this.props.userInfo && this.props.userInfo.username) ===
           this.props.user.username ? (
             <button className="btn profile-edit-btn">Edit Profile</button>
+          ) : this.props.user.following ? (
+            <button className="unfollow-button" onClick={this.props.unfollow}>
+              Unfollow
+            </button>
           ) : (
-            <div>follow</div>
+            <button className="follow-button" onClick={this.props.follow}>
+              Follow
+            </button>
           )}
           <button
             className="btn profile-settings-btn"
