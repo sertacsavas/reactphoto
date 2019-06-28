@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Nav, Navbar, Button } from "react-bootstrap";
-
+//sertaç
 export default class NavigationBar extends React.Component {
   render() {
     return (
