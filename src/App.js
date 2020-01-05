@@ -33,8 +33,10 @@ class App extends Component {
   login(email, password, props) {
     this.Auth.login(email, password)
       .then(res => {
-        this.refreshAuth();
-        props.history.replace("/");
+        if (res != null) {
+          this.refreshAuth();
+          props.history.replace("/");
+        }
       })
       .catch(err => {
         alert(err);

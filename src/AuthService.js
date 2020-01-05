@@ -15,9 +15,10 @@ export default class AuthService {
         password
       })
     }).then(res => {
-      console.log(res);
-      this.setToken(res.accessToken);
-      return Promise.resolve(res);
+      if (res != null) {
+        this.setToken(res.accessToken);
+        return Promise.resolve(res);
+      }
     });
   }
 
@@ -85,7 +86,10 @@ export default class AuthService {
     })
       .then(this._checkStatus)
       .then(res => res.text())
-      .then(text => (text.length ? JSON.parse(text) : {}));
+      .then(text => (text.length ? JSON.parse(text) : {}))
+      .catch(error => {
+        alert(error.message);
+      });
   }
 
   _checkStatus(response) {
@@ -94,7 +98,14 @@ export default class AuthService {
     if (response.status >= 200 && response.status < 300) {
       return response;
     } else {
-      var error = new Error(response.statusText);
+      var error = new Error(
+        response.statusText != null && response.statusText.length
+          ? response.statusText
+          : response.message != null && response.message.length
+          ? response.message
+          : response.status
+      );
+      var error = new Error(response.status);
       error.response = response;
       throw error;
     }

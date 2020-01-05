@@ -21,10 +21,11 @@ export default class Home extends React.Component {
     this.ApiService.getFeed(this.state.page, this.state.per).then(result => {
       this.setState({
         loadingposts: false,
-        postList: [...this.state.postList, ...result.postList],
+        postList:
+          result != null ? [...this.state.postList, ...result.postList] : [],
         scrolling: false,
-        totalPages: result.totalPages,
-        totalElements: result.totalElements
+        totalPages: result != null ? result.totalPages : null,
+        totalElements: result != null ? result.totalElements : null
       });
     });
   }
