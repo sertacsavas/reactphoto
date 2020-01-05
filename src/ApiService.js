@@ -6,6 +6,18 @@ export default class ApiService {
     this.Auth = new AuthService();
   }
 
+  like(id) {
+    return this.fetch("/api/like/like/" + id, {
+      method: "GET"
+    });
+  }
+
+  unLike(id) {
+    return this.fetch("/api/like/unLike/" + id, {
+      method: "GET"
+    });
+  }
+
   follow(id) {
     return this.fetch("/api/follow/follow/" + id, {
       method: "GET"
