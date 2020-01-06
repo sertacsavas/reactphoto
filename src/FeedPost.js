@@ -9,7 +9,8 @@ export default class FeedPost extends React.Component {
     super(props);
     this.ApiService = new ApiService();
     this.state = {
-      liked: false
+      liked: this.props.post.viewerHasLiked,
+      likeCount: this.props.post.likeCount
     };
     this.like = this.like.bind(this);
     this.unLike = this.unLike.bind(this);
@@ -18,7 +19,8 @@ export default class FeedPost extends React.Component {
   like() {
     this.ApiService.like(this.props.post.id).then(() => {
       this.setState({
-        liked: true
+        liked: true,
+        likeCount: this.state.likeCount + 1
       });
     });
   }
@@ -26,7 +28,8 @@ export default class FeedPost extends React.Component {
   unLike() {
     this.ApiService.unLike(this.props.post.id).then(() => {
       this.setState({
-        liked: false
+        liked: false,
+        likeCount: this.state.likeCount - 1
       });
     });
   }
@@ -58,6 +61,8 @@ export default class FeedPost extends React.Component {
             <LikeIcon width={30} />
           </a>
         )}
+
+        <div>{this.state.likeCount} likes</div>
       </div>
     );
   }
