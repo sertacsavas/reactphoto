@@ -6,6 +6,16 @@ export default class ApiService {
     this.Auth = new AuthService();
   }
 
+  comment(postId, comment) {
+    return this.fetch("/api/comment/comment", {
+      method: "POST",
+      body: JSON.stringify({
+        postId,
+        comment
+      })
+    });
+  }
+
   like(id) {
     return this.fetch("/api/like/like/" + id, {
       method: "GET"
@@ -37,6 +47,12 @@ export default class ApiService {
         method: "GET"
       }
     );
+  }
+
+  getComments(postId) {
+    return this.fetch("/api/comment/getComments/" + postId, {
+      method: "GET"
+    });
   }
 
   getFeed(page, size) {

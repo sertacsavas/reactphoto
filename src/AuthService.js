@@ -105,7 +105,6 @@ export default class AuthService {
           ? response.message
           : response.status
       );
-      var error = new Error(response.status);
       error.response = response;
       throw error;
     }
