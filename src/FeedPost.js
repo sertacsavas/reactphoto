@@ -4,6 +4,7 @@ import LikeIcon from "./LikeIcon";
 import LikedIcon from "./LikedIcon";
 import ApiService from "./ApiService";
 import { Form, Button, Row, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
 
 export default class FeedPost extends React.Component {
   constructor(props) {
@@ -92,9 +93,16 @@ export default class FeedPost extends React.Component {
     return (
       <div>
         <li className="feed-item" key={this.props.post.id}>
-          <div>{this.props.post.userSummary.username}</div>
-          <Image className="feed-image" src={this.props.post.url} fluid />
+          <Row>
+            <Link to={"/" + this.props.post.userSummary.username}>
+              {this.props.post.userSummary.username}
+            </Link>
+          </Row>
+          <Row>
+            <Image className="feed-image" src={this.props.post.url} fluid />
+          </Row>
         </li>
+
         <Row>
           <Col>
             {this.state.liked ? (
