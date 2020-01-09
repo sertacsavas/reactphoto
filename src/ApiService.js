@@ -6,6 +6,13 @@ export default class ApiService {
     this.Auth = new AuthService();
   }
 
+  upload(formData) {
+    return this.fetchWithoutContentType("/api/upload/media/upload", {
+      method: "POST",
+      body: formData
+    });
+  }
+
   comment(postId, comment) {
     return this.fetch("/api/comment/comment", {
       method: "POST",
@@ -65,6 +72,10 @@ export default class ApiService {
     return this.fetch("/api/user/getProfileByUserName/" + username, {
       method: "GET"
     });
+  }
+
+  fetchWithoutContentType(url, options) {
+    return this.Auth.fetchWithoutContentType(`${this.domain}` + url, options);
   }
 
   fetch(url, options) {

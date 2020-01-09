@@ -69,12 +69,19 @@ export default class AuthService {
     return this.getToken() ? decode(this.getToken()) : null;
   }
 
-  fetch(url, options) {
+  fetchContentType(url, options, isContentTypeIncluded, contentType) {
     // performs api calls sending the required authentication headers sertac
-    const headers = {
-      Accept: "application/json",
-      "Content-Type": "application/json"
+    let headers = {
+      Accept: "application/json"
+      //"Content-Type": "multipart/form-data"
     };
+
+    if (isContentTypeIncluded) {
+      headers = {
+        Accept: "application/json",
+        "Content-Type": contentType
+      };
+    }
 
     if (this.loggedIn()) {
       headers["Authorization"] = "Bearer " + this.getToken();
@@ -90,6 +97,18 @@ export default class AuthService {
       .catch(error => {
         alert(error.message);
       });
+  }
+
+  fetchWithContentType(url, options, contentType) {
+    return this.fetchContentType(url, options, true, contentType);
+  }
+
+  fetchWithoutContentType(url, options) {
+    return this.fetchContentType(url, options, false, null);
+  }
+
+  fetch(url, options) {
+    return this.fetchWithContentType(url, options, "application/json");
   }
 
   _checkStatus(response) {

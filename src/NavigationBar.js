@@ -1,8 +1,26 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Nav, Navbar, Button } from "react-bootstrap";
-//sertaç
+import ApiService from "./ApiService";
 export default class NavigationBar extends React.Component {
+  constructor(props) {
+    super(props);
+    this.ApiService = new ApiService();
+    this.upload = this.upload.bind(this);
+  }
+
+  upload = e => {
+    const files = Array.from(e.target.files);
+
+    const formData = new FormData();
+
+    formData.append("file", files[0]);
+
+    this.ApiService.upload(formData).then(() => {
+      console.log("upload ok");
+    });
+  };
+
   render() {
     return (
       <Navbar expand="lg">
@@ -28,7 +46,11 @@ export default class NavigationBar extends React.Component {
                 </Link>
               </Nav.Item>
             )}
-
+            {this.props.loggedIn ? (
+              <Nav.Item>
+                <input type="file" id="single" onChange={this.upload} />
+              </Nav.Item>
+            ) : null}
             {this.props.loggedIn ? (
               <Nav.Item>
                 <Button

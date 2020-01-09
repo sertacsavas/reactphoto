@@ -82,11 +82,14 @@ export default class FeedPost extends React.Component {
         }
       ];
 
-      this.ApiService.comment(this.props.post.id, this.state.comment);
-      this.setState({
-        comment: "",
-        commentList: [...this.state.commentList, ...comment]
-      });
+      this.ApiService.comment(this.props.post.id, this.state.comment).then(
+        () => {
+          this.setState({
+            comment: "",
+            commentList: [...this.state.commentList, ...comment]
+          });
+        }
+      );
     }
   };
   render() {
