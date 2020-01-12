@@ -55,12 +55,12 @@ export default class ApiService {
       }
     );
   }
-
+  /*
   getComments(postId) {
     return this.fetch("/api/comment/getComments/" + postId, {
       method: "GET"
     });
-  }
+  }*/
 
   getFeed(page, size) {
     return this.fetch("/api/post/getFeed/?page=" + page + "&size=" + size, {

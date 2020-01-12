@@ -14,12 +14,12 @@ export default class FeedPost extends React.Component {
       liked: this.props.post.viewerHasLiked,
       likeCount: this.props.post.likeCount,
       comment: "",
-      commentList: []
+      commentList: this.props.post.commentList
     };
     this.like = this.like.bind(this);
     this.unLike = this.unLike.bind(this);
   }
-
+  /*
   loadComments() {
     this.ApiService.getComments(this.props.post.id).then(result => {
       this.setState({
@@ -33,7 +33,7 @@ export default class FeedPost extends React.Component {
       this.loadComments();
     }
   }
-
+*/
   componentWillUnmount() {}
 
   like() {
