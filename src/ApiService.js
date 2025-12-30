@@ -2,7 +2,11 @@ import AuthService from "./AuthService";
 
 export default class ApiService {
   constructor() {
-    this.domain = "http://localhost:8080";
+    //   this.domain = "http://localhost:8080";
+    //   this.domain = "http://localhost:5000";
+
+    this.domain =
+      "http://photo-env-1.dqudh627pn.eu-central-1.elasticbeanstalk.com";
     this.Auth = new AuthService();
   }
 
